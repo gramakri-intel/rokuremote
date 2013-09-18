@@ -61,6 +61,8 @@ function getApps() {
         dataType: "xml"
     }).done(function (xml) {
         // console.log('GOT A RESPONSE');
+        $.mobile.changePage($('#controlsPage'), { transition: 'slide' });
+
         $(xml).find('app').each(function (app) {
             var appName = $(this).text();
             var appId = $(this).attr('id');
@@ -70,17 +72,29 @@ function getApps() {
             $('#appsListView').append(li);
         });
         // $('#appsListView').listview('refresh');
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        alert('cannot connect to roku ' + textStatus);
     });
 }
-
+    
+$.mobile.pushStateEnabled = false;
+    
 var onDeviceReady=function() {
+    // hack for emulator
+    console.log('Switching to the main page');
+    $.mobile.pushStateEnabled = true;
+
+    $.mobile.changePage($('#mainPage'), {
+        transition: "none",
+        changeHash: false
+    });
+
     $('#connectButton').click(function () {
         rokuIP = $('#device-ip').val();
         if (!rokuIP || rokuIP.length === 0) {
             alert('Enter roku ip');
             return;
         }
-        $.mobile.changePage($('#controlsPage'), { transition: 'slide' });
         getApps();
     });
     
@@ -178,3 +192,6 @@ document.addEventListener("deviceready", onDeviceReady, false);
 
 </body>
 </html>
+
+
+
