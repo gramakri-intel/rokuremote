@@ -56,8 +56,10 @@ function getApps() {
         // console.log('GOT A RESPONSE');
         $(xml).find('app').each(function (app) {
             var appName = $(this).text();
+            var appId = $(this).attr('id');
             console.log('APP HERE' + $(this).attr('id'));
-            $('#appsListView').append('<li><a>' + appName + '</a></li>');
+            var appImage = '<img src="http://10.3.71.198:8060/query/icon/' + appId + '"/>';
+            $('#appsListView').append('<li><a>' + appImage + appName + '</a></li>');
         });
         $('#appsListView').listview('refresh');
     });
