@@ -49,6 +49,22 @@ var onDeviceReady=function() {
         $.mobile.changePage($('#controlsPage'), { transition: 'slide' });
     });
     
+    $("a[data-role=tab]").each(function () {
+        var anchor = $(this);
+        anchor.bind("click", function () {
+            $.mobile.changePage(anchor.attr("href"), {
+                transition: "none",
+                changeHash: false
+            });
+            return false;
+        });
+    });
+    
+    $("div[data-role=page]").bind("pagebeforeshow", function (e, data) {
+        $.mobile.silentScroll(0);
+        $.mobile.changePage.defaults.transition = 'slide';
+    });
+
     document.getElementById('backButton').addEventListener('click', sendButton.bind(null, 'Back'), false);
     document.getElementById('upButton').addEventListener('click', sendButton.bind(null, 'Up'), false);
     document.getElementById('downButton').addEventListener('click', sendButton.bind(null, 'Down'), false);
@@ -77,20 +93,42 @@ document.addEventListener("deviceready", onDeviceReady, false);
         </div><!-- /footer -->
     </div><!-- /page -->
     
-    <div data-role="page" id="controlsPage">
+    <div data-role="page" id="appsPage">
     
         <div data-role="header">
+            <a href="#" data-icon="arrow-l" data-iconpos="left" data-rel="back" data-transition="slide" data-direction="reverse">Back</a>
             <h1>Roku Remote</h1>
-            <div data-role="navbar">
-                <ul>
-                    <li><a href="#" data-icon="grid">Apps</a></li>
-                    <li><a href="#" data-icon="star" class="ui-btn-active">Remote</a></li>
-                </ul>
-            </div>
+               <div data-role="navbar">
+                    <ul>
+                        <li><a href="#appsPage" data-role="tab" data-icon="grid" class="ui-btn-active">Apps</a></li>
+                        <li><a href="#controlsPage" data-role="tab" data-icon="grid">Controls</a></li>
+                    </ul>
+                </div>
         </div><!-- /header -->
 
         <div data-role="content">
-            <p style="padding-top: 33%">Enter IP address of the Roku: </p>
+            <p style="padding-top: 33%">Show the apps here</p>
+       </div><!-- /content -->
+    
+        <div data-role="footer">
+        </div><!-- /footer -->
+    </div><!-- /page -->
+
+    <div data-role="page" id="controlsPage">
+    
+        <div data-role="header">
+            <a href="#" data-icon="arrow-l" data-iconpos="left" data-rel="back" data-transition="slide" data-direction="reverse">Back</a>
+            <h1>Roku Remote</h1>
+               <div data-role="navbar">
+                    <ul>
+                        <li><a href="#appsPage" data-role="tab" data-icon="grid">Apps</a></li>
+                        <li><a href="#controlsPage" data-role="tab" data-icon="grid" class="ui-btn-active">Controls</a></li>
+                    </ul>
+                </div>
+        </div><!-- /header -->
+
+        <div data-role="content">
+            <p style="padding-top: 33%">Show the remote controls here</p>
        </div><!-- /content -->
     
         <div data-role="footer">
