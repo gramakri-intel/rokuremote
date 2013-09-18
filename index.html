@@ -58,8 +58,8 @@ function getApps() {
             var appName = $(this).text();
             var appId = $(this).attr('id');
             console.log('APP HERE' + $(this).attr('id'));
-            var appImage = '<img src="http://10.3.71.198:8060/query/icon/' + appId + '"/>';
-            $('#appsListView').append('<li><a>' + appImage + appName + '</a></li>');
+            var appImage = '<img src="http://10.3.71.198:8060/query/icon/' + appId + '" class="ui-corner-none">';
+            $('#appsListView').append('<li><a href="#">' + appImage + appName + '</a></li>');
         });
         $('#appsListView').listview('refresh');
     });
@@ -133,7 +133,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
         </div><!-- /header -->
 
         <div data-role="content">
-            <ul data-role="listview" id="appsListView">
+            <ul data-role="listview" id="appsListView" data-inset="true">
             </ul>
         </div><!-- /content -->
     
