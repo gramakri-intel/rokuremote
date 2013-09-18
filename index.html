@@ -16,27 +16,13 @@
       top: 0;
       bottom: 0;
       left: 0;
-      right: 0;    
+      right: 0;
+      overflow: hidden;
     }
 
     #buttons {
       overflow: hidden;
       height: 100%;
-    }
-
-    /* Buttons */
-    .button {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      margin: 2%;
-      background: #777;
-      color: #eee;
-      text-align: center;
-      border-radius: 0.1em;
-      font-weight: 700;  
     }
     
     .outer {
@@ -45,10 +31,41 @@
         width: 33.33%;
         height: 33.33%;
     }
-
+    
+     .align-centerbottom {
+        width: 100%;
+        text-align: center;
+        position: absolute;
+        bottom: 0px;
+    }
+    .align-centertop {
+        width: 100%;
+        text-align: center;
+        position: absolute;
+        top: 0px;
+    }
+     .align-rightcenter {
+        width: 100%;
+        text-align: right;
+        position: absolute;
+        top: 25%; bottom: 25%;
+    }
+     .align-leftcenter {
+        width: 100%;
+        text-align: left;
+        position: absolute;
+        top: 25%; bottom: 25%;
+    }
+    .align-centercenter {
+        width: 100%; height: 100%;
+        background-image: url("images/band.png");
+        background-size: 500%;
+        background-position:center;
+    }
 </style>
 <script src="http://debug-software.intel.com/target/target-script-min.js#6d877bc6-d1fa-4553-9f59-18d004864d64"></script>
 <script src='cordova.js'></script>
+<script src="jquery.mobile-1.3.2.min.js"></script>
 <script type="text/javascript">
 /* This function runs once the page is loaded, but appMobi is not yet active */
 var onWindowLoad = function(){
@@ -100,7 +117,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
         </div>
         
         <div class="outer">
-            <div id="upButton" class="button">Up</div>
+            <a class="align-centerbottom"><img src="images/up.png" id="upButton" class="button"/></a>
         </div>
                 
         <div class="outer">
@@ -108,15 +125,15 @@ document.addEventListener("deviceready", onDeviceReady, false);
         </div>
     
         <div class="outer">
-            <div id="leftButton" class="button">Left</div>
+            <a class="align-rightcenter"><img src="images/left.png" id="leftButton" class="button"/></a>
         </div>
             
         <div class="outer">
-            <div id="okButton" class="button">OK</div>
+            <div id="okButton" class="button align-centercenter"/></div>
         </div>
                                 
         <div class="outer">
-            <div id="rightButton" class="button">Right</div>
+            <a class="align-leftcenter"><img src="images/right.png" id="rightButton" class="button"/></a>
         </div>
              
         <div class="outer">
@@ -124,7 +141,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
         </div>
         
         <div class="outer">
-            <div id="downButton" class="button">Down</div>
+            <a class="align-centertop"><img src="images/down.png" id="downButton" class="button"/></a>
         </div>
     
         <div class="outer">
