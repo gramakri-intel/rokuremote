@@ -17,7 +17,7 @@
 <script src="jquery-1.9.1.min.js"></script>
 <script src="jquery.mobile-1.3.2.min.js"></script>
 <script type="text/javascript">
-var deviceIP;
+var rokuIP = "10.3.71.198";
 
 /* This function runs once the page is loaded, but appMobi is not yet active */
 var onWindowLoad = function(){
@@ -42,7 +42,7 @@ function sendButton(buttonName) {
             }
         }
     };
-    xhr.open("POST", "http://10.3.71.190:8060/keypress/" + buttonName);
+    xhr.open("POST", "http://" + rokuIP + ":8060/keypress/" + buttonName);
     xhr.send();
 }
 
@@ -50,7 +50,7 @@ function getApps() {
     console.log('GETTING APPS!!!');
     $.ajax({
         type: "GET",
-        url: "http://10.3.71.198:8060/query/apps",
+        url: "http://" + rokuIP + ":8060/query/apps",
         dataType: "xml"
     }).done(function (xml) {
         // console.log('GOT A RESPONSE');
@@ -58,7 +58,7 @@ function getApps() {
             var appName = $(this).text();
             var appId = $(this).attr('id');
             console.log('APP HERE' + $(this).attr('id'));
-            var appImage = '<img src="http://10.3.71.198:8060/query/icon/' + appId + '" class="ui-corner-none">';
+            var appImage = '<img src="http://' + rokuIP + ':8060/query/icon/' + appId + '" class="ui-corner-none">';
             $('#appsListView').append('<li><a href="#">' + appImage + appName + '</a></li>');
         });
         $('#appsListView').listview('refresh');
@@ -67,7 +67,7 @@ function getApps() {
 
 var onDeviceReady=function() {
     $('#connectButton').click(function () {
-        deviceIP = $('device-ip').val();
+        rokuIP = $('device-ip').val();
         $.mobile.changePage($('#controlsPage'), { transition: 'slide' });
     });
     
@@ -89,7 +89,7 @@ var onDeviceReady=function() {
 
     getApps();
 
-    // FIXME: deviceIP from local settings!!!
+    // FIXME: rokuIP from local settings!!!
 
     document.getElementById('backButton').addEventListener('click', sendButton.bind(null, 'Back'), false);
     document.getElementById('upButton').addEventListener('click', sendButton.bind(null, 'Up'), false);
