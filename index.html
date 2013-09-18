@@ -1,0 +1,137 @@
+<!DOCTYPE html><!--HTML5 doctype-->
+<html>
+<head>
+<title>Your New Application</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8"> 
+<meta name="viewport" content="width=device-width, user-scalable=no">
+
+<style type="text/css">
+    /* Prevent copy paste for all elements except text fields */
+    *  { -webkit-user-select:none; -webkit-tap-highlight-color:rgba(255, 255, 255, 0); }
+    input, textarea  { -webkit-user-select:text; }
+    
+    body {
+      background-color: #222;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;    
+    }
+
+    #buttons {
+      overflow: hidden;
+      height: 100%;
+    }
+
+    /* Buttons */
+    .button {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: 2%;
+      background: #777;
+      color: #eee;
+      text-align: center;
+      border-radius: 0.1em;
+      font-weight: 700;  
+    }
+    
+    .outer {
+        position: relative;
+        float: left;
+        width: 33.33%;
+        height: 33.33%;
+    }
+
+</style>
+<script src="http://debug-software.intel.com/target/target-script-min.js#6d877bc6-d1fa-4553-9f59-18d004864d64"></script>
+<script src='cordova.js'></script>
+<script type="text/javascript">
+/* This function runs once the page is loaded, but appMobi is not yet active */
+var onWindowLoad = function(){
+
+};
+window.addEventListener("load", onWindowLoad, false);  
+
+/* This code prevents users from dragging the page */
+var preventDefaultScroll = function(event) {
+    event.preventDefault();
+    window.scroll(0,0);
+    return false;
+};
+document.addEventListener('touchmove', preventDefaultScroll, false);
+
+function sendButton(buttonName) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (this.readyState == 4 /* this.DONE */) {
+            if (this.status == 200) {
+                console.log('SENT!');
+            }
+        }
+    };
+    xhr.open("POST", "http://10.3.71.190:8060/keypress/" + buttonName);
+    xhr.send();
+}
+    
+var onDeviceReady=function() {
+    document.getElementById('backButton').addEventListener('click', sendButton.bind(null, 'Back'), false);
+    document.getElementById('upButton').addEventListener('click', sendButton.bind(null, 'Up'), false);
+    document.getElementById('downButton').addEventListener('click', sendButton.bind(null, 'Down'), false);
+    document.getElementById('leftButton').addEventListener('click', sendButton.bind(null, 'Left'), false);
+    document.getElementById('rightButton').addEventListener('click', sendButton.bind(null, 'Right'), false);
+};
+document.addEventListener("deviceready", onDeviceReady, false);
+
+</script>
+
+</head>
+<body>
+    <input type="text" placeholder="Enter IP address"/>
+    <button> Connect </button>
+    
+    <div id="buttons">
+                        
+        <div class="outer">
+            <div id="topLeft" class="button"></div>
+        </div>
+        
+        <div class="outer">
+            <div id="upButton" class="button">Up</div>
+        </div>
+                
+        <div class="outer">
+            <div id="topRight" class="button"></div>
+        </div>
+    
+        <div class="outer">
+            <div id="leftButton" class="button">Left</div>
+        </div>
+            
+        <div class="outer">
+            <div id="okButton" class="button">OK</div>
+        </div>
+                                
+        <div class="outer">
+            <div id="rightButton" class="button">Right</div>
+        </div>
+             
+        <div class="outer">
+            <div id="bottomLeft" class="button"></div>
+        </div>
+        
+        <div class="outer">
+            <div id="downButton" class="button">Down</div>
+        </div>
+    
+        <div class="outer">
+            <div id="bottomRight" class="button"></div>
+        </div>
+    
+    </div>
+        
+</body>
+</html>
