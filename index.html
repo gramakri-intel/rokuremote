@@ -17,7 +17,7 @@
 <script src="jquery-1.9.1.min.js"></script>
 <script src="jquery.mobile-1.3.2.min.js"></script>
 <script type="text/javascript">
-var rokuIP = "10.3.71.198";
+var rokuIP; // = "10.3.71.198";
 
 /* This function runs once the page is loaded, but appMobi is not yet active */
 var onWindowLoad = function(){
@@ -70,14 +70,19 @@ function getApps() {
             var li = $('<li><a href="#">' + appImage + appName + '</a></li>').click(launchApp.bind(null, appId));
             $('#appsListView').append(li);
         });
-        $('#appsListView').listview('refresh');
+        // $('#appsListView').listview('refresh');
     });
 }
 
 var onDeviceReady=function() {
     $('#connectButton').click(function () {
-        rokuIP = $('device-ip').val();
+        rokuIP = $('#device-ip').val();
+        if (!rokuIP || rokuIP.length === 0) {
+            alert('Enter roku ip');
+            return;
+        }
         $.mobile.changePage($('#controlsPage'), { transition: 'slide' });
+        getApps();
     });
     
     $("a[data-role=tab]").each(function () {
@@ -95,8 +100,6 @@ var onDeviceReady=function() {
         $.mobile.silentScroll(0);
         $.mobile.changePage.defaults.transition = 'slide';
     });
-
-    getApps();
 
     // FIXME: rokuIP from local settings!!!
 
