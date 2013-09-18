@@ -17,6 +17,8 @@
 <script src="jquery-1.9.1.min.js"></script>
 <script src="jquery.mobile-1.3.2.min.js"></script>
 <script type="text/javascript">
+var deviceIP;
+
 /* This function runs once the page is loaded, but appMobi is not yet active */
 var onWindowLoad = function(){
 
@@ -43,9 +45,27 @@ function sendButton(buttonName) {
     xhr.open("POST", "http://10.3.71.190:8060/keypress/" + buttonName);
     xhr.send();
 }
-   
+
+function getApps() {
+    console.log('GETTING APPS!!!');
+    $.ajax({
+        type: "GET",
+        url: "http://10.3.71.198:8060/query/apps",
+        dataType: "xml"
+    }).done(function (xml) {
+        // console.log('GOT A RESPONSE');
+        $(xml).find('app').each(function (app) {
+            var appName = $(this).text();
+            console.log('APP HERE' + $(this).attr('id'));
+            $('#appsListView').append('<li><a>' + appName + '</a></li>');
+        });
+        $('#appsListView').listview('refresh');
+    });
+}
+
 var onDeviceReady=function() {
     $('#connectButton').click(function () {
+        deviceIP = $('device-ip').val();
         $.mobile.changePage($('#controlsPage'), { transition: 'slide' });
     });
     
@@ -64,6 +84,10 @@ var onDeviceReady=function() {
         $.mobile.silentScroll(0);
         $.mobile.changePage.defaults.transition = 'slide';
     });
+
+    getApps();
+
+    // FIXME: deviceIP from local settings!!!
 
     document.getElementById('backButton').addEventListener('click', sendButton.bind(null, 'Back'), false);
     document.getElementById('upButton').addEventListener('click', sendButton.bind(null, 'Up'), false);
@@ -85,7 +109,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
     
         <div data-role="content">
             <p style="padding-top: 33%">Enter IP address of the Roku: </p>
-            <input type="text" placeholder="IP" name="number" pattern="[0-9]*" id="ip-address" value="">
+            <input type="text" placeholder="IP" name="number" pattern="[0-9]*" id="device-ip" value="">
             <a id="connectButton" href="#" data-role="button" data-mini="true" data-inline="true" data-icon="check" data-theme="b">Connect</a>
         </div><!-- /content -->
     
@@ -107,8 +131,9 @@ document.addEventListener("deviceready", onDeviceReady, false);
         </div><!-- /header -->
 
         <div data-role="content">
-            <p style="padding-top: 33%">Show the apps here</p>
-       </div><!-- /content -->
+            <ul data-role="listview" id="appsListView">
+            </ul>
+        </div><!-- /content -->
     
         <div data-role="footer">
         </div><!-- /footer -->
