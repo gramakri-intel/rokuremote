@@ -182,6 +182,10 @@ var onDeviceReady=function() {
     $('#downButton').click(sendButton.bind($('#downButton'), 'Down'));
     $('#leftButton').click(sendButton.bind($('#leftButton'), 'Left'));
     $('#rightButton').click(sendButton.bind($('#rightButton'), 'Right'));
+    $('#playButton').click(sendButton.bind($('#playButton'), 'Play'));
+    $('#rewindButton').click(sendButton.bind($('#rewindButton'), 'Rev'));
+    $('#forwardButton').click(sendButton.bind($('#forwardButton'), 'Fwd'));
+    $('#selectButton').click(sendButton.bind($('#selectButton'), 'Select'));
     
     resumeScanning();
 };
@@ -266,12 +270,29 @@ $(document).ready(onDeviceReady);
 
             <br/>
             <br/>
+            <br/>
+            <br/>
             <a class="align-centerbottom" style="margin-left: 36%"><img src="images/up.png" id="upButton" class="button"/></a>
             <br/>
-            <a class="align-rightcenter" style="margin-left: 18%"><img src="images/left.png" id="leftButton" class="button"/></a>
-            <a class="align-leftcenter" style="margin-left: 18%"><img src="images/right.png" id="rightButton" class="button"/></a>
+            <br/>
+            <br/>
+            <a class="align-rightcenter" style="margin-left: 15%"><img src="images/left.png" id="leftButton" class="button"/></a>
+            <a class="align-rightcenter" style="margin-left: 3%"><img src="images/ok.png" id="selectButton" class="button"/></a>
+            <a class="align-leftcenter" style="margin-left: 5%"><img src="images/right.png" id="rightButton" class="button"/></a>
+            <br/>
+            <br/>
             <br/>
             <a class="align-centertop" style="margin-left: 36%"><img src="images/down.png" id="downButton" class="button"/></a>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <a class="align-centertop" style="margin-left: 5%"><img src="images/reverse.png" id="reverseButton" class="button"/></a>
+            <a class="align-centertop" style="margin-left: 15%"><img src="images/play.png" id="playButton" class="button"/></a>
+            <a class="align-centertop" style="margin-left: 15%"><img src="images/forward.png" id="forwardButton" class="button"/></a>
        </div><!-- /content -->
     </div><!-- /page -->
 
