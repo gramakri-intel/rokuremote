@@ -92,10 +92,7 @@ function loadedImage() {
     rokuIP = baseNetworkIP + '.' + currentIndex;
     clearTimeout(currentTimerId);
     currentIndex = -1;
-    $.mobile.changePage($('#controlsPage'), {
-        transition: "slide",
-        changeHash: true
-    });
+    getApps(); // this will transition the page
 }
 
 function imageError() {
