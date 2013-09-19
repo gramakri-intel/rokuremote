@@ -11,13 +11,15 @@
     input, textarea  { -webkit-user-select:text; }
     
 </style>
-<script src='cordova.js'></script>
+<!--<script src='cordova.js'></script>-->
 <link rel="stylesheet" href="jquery.mobile-1.3.2.min.css" />
 <script src="jquery-1.9.1.min.js"></script>
 <script src="jquery.mobile-1.3.2.min.js"></script>
 <script type="text/javascript">
-var rokuIP = "10.3.71.198"; // keep emulator happy
-
+var rokuIP; // keep emulator happy
+var baseNetworkIP = "192.168.1"; // FIXME: autodetect!
+var rokuImage;
+    
 /* This function runs once the page is loaded, but appMobi is not yet active */
 var onWindowLoad = function(){
 
@@ -33,11 +35,14 @@ var preventDefaultScroll = function(event) {
 document.addEventListener('touchmove', preventDefaultScroll, false);
 
 function sendButton(buttonName) {
+    var that = this;
+   that.css("background", "#696969");
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
         if (this.readyState == 4 /* this.DONE */) {
             if (this.status == 200) {
-                console.log('SENT!');
+                console.log('SENT!');   that.css("background", "");
+
             }
         }
     };
@@ -78,7 +83,54 @@ function getApps() {
 }
     
 $.mobile.pushStateEnabled = false;
+
+var currentIndex = -1, currentTimerId;
+
+function loadedImage() {
+    var URL = this.src;
+    console.log('I found something at ', URL);
+    rokuIP = baseNetworkIP + '.' + currentIndex;
+    clearTimeout(currentTimerId);
+    currentIndex = -1;
+    $.mobile.changePage($('#controlsPage'), {
+        transition: "slide",
+        changeHash: true
+    });
+}
+
+function imageError() {
+    console.log('Nothing at ', this.src);
+    clearTimeout(currentTimerId);
+    resumeScanning();
+}
     
+function resumeScanning() {
+    if (currentIndex == -1) { // first time
+        rokuImage = new Image();
+        rokuImage.onload = loadedImage;
+        rokuImage.onerror = imageError;
+    }
+
+    if (currentIndex != -1) {
+        console.log('Nothing at ', currentIndex);
+    }
+
+    ++currentIndex;
+
+    if (currentIndex > 255) {
+        rokuImage = null;
+        currentIndex = -1;
+        console.log('Scanning complete');
+        return;
+    }
+    console.log('Searching for ', currentIndex);
+    rokuImage.src = "http://" + baseNetworkIP + "." + currentIndex + ":8060/query/icon/11";
+    currentTimerId = setTimeout(function () {
+        console.log('Killing scan of', currentIndex);
+        resumeScanning();
+    }, 1000);
+}
+
 var onDeviceReady=function() {
     // hack for emulator
     console.log('Switching to the main page');
@@ -89,6 +141,14 @@ var onDeviceReady=function() {
         changeHash: false
     });
 
+    $('#configureButton').click(function () {
+        $.mobile.changePage($('#configurePage'), {
+            transition: "slide",
+            changeHash: true
+        });
+        stopScanning();
+    });
+        
     $('#connectButton').click(function () {
         rokuIP = $('#device-ip').val();
         if (!rokuIP || rokuIP.length === 0) {
@@ -116,14 +176,18 @@ var onDeviceReady=function() {
 
     // FIXME: rokuIP from local settings!!!
 
-    $('#backButton').click(sendButton.bind(null, 'Back'));
-    $('#homeButton').click(sendButton.bind(null, 'Home'));
-    $('#upButton').click(sendButton.bind(null, 'Up'));
-    $('#downButton').click(sendButton.bind(null, 'Down'));
-    $('#leftButton').click(sendButton.bind(null, 'Left'));
-    $('#rightButton').click(sendButton.bind(null, 'Right'));
+    $('#backButton').click(sendButton.bind($('#backButton'), 'Back'));
+    $('#homeButton').click(sendButton.bind($('#homeButton'), 'Home'));
+    $('#upButton').click(sendButton.bind($('#upButton'), 'Up'));
+    $('#downButton').click(sendButton.bind($('#downButton'), 'Down'));
+    $('#leftButton').click(sendButton.bind($('#leftButton'), 'Left'));
+    $('#rightButton').click(sendButton.bind($('#rightButton'), 'Right'));
+    
+    resumeScanning();
 };
 document.addEventListener("deviceready", onDeviceReady, false);
+
+$(document).ready(onDeviceReady);
 
 </script>
 
@@ -132,6 +196,26 @@ document.addEventListener("deviceready", onDeviceReady, false);
     <div data-role="page" id="mainPage">
     
         <div data-role="header">
+            <h1>Roku Remote</h1>
+        </div><!-- /header -->
+    
+        <div data-role="content">
+            <h2 style="padding-top: 45%; padding-left: 25%">Scanning for Rokus </h2>
+            <img style="padding-left: 45%" src="images/loader.gif">
+            <br/>
+            <br/>
+            <br/>
+            <a style="margin-left: 35%" id="configureButton" href="#" data-role="button" data-mini="true" data-inline="true" data-icon="check" data-theme="b">Configure Manually</a>
+
+        </div><!-- /content -->
+    
+    </div><!-- /page -->
+    
+    <div data-role="page" id="configurePage">
+    
+        <div data-role="header">
+            <a href="#" data-icon="arrow-l" data-iconpos="left" data-rel="back" data-transition="slide" data-direction="reverse">Back</a>
+
             <h1>Roku Remote</h1>
         </div><!-- /header -->
     
